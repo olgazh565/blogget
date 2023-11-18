@@ -12,7 +12,6 @@
   },
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/prop-types": 0,
     "no-console": "off",
     "no-loop-func": ["error"],
     "eqeqeq": ["error", "always"],
