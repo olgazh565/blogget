@@ -4,7 +4,7 @@ import {ReactComponent as LoginIcon} from './img/login.svg';
 
 export const Auth = ({auth}) => (
   <button className={style.button}>
-    {auth ? auth : <LoginIcon />}
+    {auth ? auth : <LoginIcon className={style.svg}/>}
   </button>
 );
 
