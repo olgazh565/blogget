@@ -142,6 +142,8 @@
         "code": 80,
         "tabWidth": 2,
         "ignoreUrls": true,
+        "ignoreComments": true,
+        "ignoreTrailingComments": true,
         "ignorePattern": "d=\"([\\s\\S]*?)\"*"
       }
     ],
