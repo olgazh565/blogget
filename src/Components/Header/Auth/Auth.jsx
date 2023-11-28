@@ -1,23 +1,24 @@
 import style from './Auth.module.scss';
-import PropTypes from 'prop-types';
 import {ReactComponent as LoginIcon} from './img/login.svg';
 import {urlAuth} from '../../../api/auth';
 import {Text} from '../../../UI/Text/Text';
-import {useState} from 'react';
-import {useAuth} from '../../../hooks/useAuth';
+import {useContext, useState} from 'react';
+import {TokenContext} from '../../../context/tokenContext';
+import {AuthContext} from '../../../context/authContext';
 
-export const Auth = ({token, delToken}) => {
-  const [auth, delAuth] = useAuth(token, delToken);
-  const [isLogout, setLogout] = useState(false);
+export const Auth = () => {
+  const {delToken} = useContext(TokenContext);
+  const {auth, delAuth} = useContext(AuthContext);
+  const [showLogout, setShowLogout] = useState(false);
 
   const handleLogout = () => {
-    setLogout(!isLogout);
+    setShowLogout(!showLogout);
   };
 
   const handleClearAuth = () => {
     delAuth();
     delToken();
-    setLogout(false);
+    setShowLogout(false);
     window.history.replaceState(null, '', window.location.origin);
   };
 
@@ -38,7 +39,7 @@ export const Auth = ({token, delToken}) => {
         </Text>
       )}
       {
-        isLogout && (
+        showLogout && (
           <button
             className={style.logout}
             onClick={handleClearAuth}
@@ -49,9 +50,4 @@ export const Auth = ({token, delToken}) => {
       }
     </div>
   );
-};
-
-Auth.propTypes = {
-  token: PropTypes.string,
-  delToken: PropTypes.func,
 };
