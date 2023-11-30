@@ -12,6 +12,7 @@
   background: var(--white);
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
+  // min-height: 145px;
 }
 
 @media (min-width: 580px) {
@@ -20,6 +21,7 @@
     grid-template-areas:
       'img content content'
       'img rating data';
+    min-height: 195px;
   }
 }
 

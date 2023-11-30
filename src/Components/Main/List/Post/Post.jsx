@@ -7,14 +7,24 @@ import {DateEl} from './Date/Date';
 import {DeleteBtn} from './DeleteBtn/DeleteBtn';
 
 export const Post = ({postData}) => {
-  const {title, author, ups, created, url, thumbnail} = postData;
+  const {
+    id,
+    title,
+    author,
+    ups,
+    created,
+    thumbnail,
+  } = postData;
 
   return (
     <li className={style.post}>
-      <Image title={title} thumbnail={thumbnail}/>
-      <Content title={title} author={author} url={url}/>
+      <Image title={title} thumbnail={thumbnail} />
+      <Content
+        title={title}
+        author={author}
+        id={id} />
       <Rating ups={ups} />
-      <DateEl date={created}/>
+      <DateEl date={created} />
       <DeleteBtn />
     </li>
   );
