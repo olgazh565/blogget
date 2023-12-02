@@ -7,9 +7,13 @@ export const usePostsData = () => {
   const dispatch = useDispatch();
   const token = useSelector(state => state.token);
   const [data, setData] = useState([]);
-  console.log('data: ', data);
 
   useEffect(() => {
+    if (!token) {
+      setData([]);
+      return;
+    }
+
     fetch(`${URL_API}/best`, {
       headers: {
         Authorization: `bearer ${token}`

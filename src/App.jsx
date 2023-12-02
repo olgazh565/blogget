@@ -1,8 +1,6 @@
 import {Header} from './Components/Header/Header';
 import {Main} from './Components/Main/Main';
-// import {createStore} from 'redux';
 import {useDispatch} from 'react-redux';
-// import {configureStore} from '@reduxjs/toolkit';
 import {AuthContextProvider} from './context/authContext';
 import {PostsContextProvider} from './context/postsContext';
 import {updateToken} from './store';
