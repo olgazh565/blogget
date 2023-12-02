@@ -42,7 +42,7 @@ export const Modal = ({id, closeModal}) => {
 
   return createPortal(
     <div className={style.overlay} ref={overlayRef}>
-      <div className={style.modal}>
+      <div className={style.modal} >
 
         {!isDataLoaded && <p>Идет загрузка...</p>}
 
@@ -82,9 +82,9 @@ export const Modal = ({id, closeModal}) => {
               </button>
             }
 
-            {showCommentsForm && <FormComment />}
-
             <Comments comments={comments} />
+
+            {showCommentsForm && <FormComment />}
 
             <button className={style.close} ref={closeBtnRef}>
               <CloseIcon />

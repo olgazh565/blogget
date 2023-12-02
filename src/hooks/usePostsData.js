@@ -1,14 +1,15 @@
-import {useState, useEffect, useContext} from 'react';
+import {useState, useEffect} from 'react';
 import {URL_API} from '../api/const';
-import {TokenContext} from '../context/tokenContext';
+import {useDispatch, useSelector} from 'react-redux';
+import {deleteToken} from '../store';
 
 export const usePostsData = () => {
-  const {token, delToken} = useContext(TokenContext);
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.token);
   const [data, setData] = useState([]);
+  console.log('data: ', data);
 
   useEffect(() => {
-    if (!token) return;
-
     fetch(`${URL_API}/best`, {
       headers: {
         Authorization: `bearer ${token}`
@@ -18,7 +19,7 @@ export const usePostsData = () => {
       .then(({data}) => setData(data.children))
       .catch((error) => {
         if (error.response && error.response.status === 401) {
-          delToken();
+          dispatch(deleteToken());
         }
         console.error(error);
         setData([]);

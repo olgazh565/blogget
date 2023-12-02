@@ -14,7 +14,7 @@ export const Comments = ({comments}) => {
   return (
     <ul className={style.list}>
       {comments.map(comment => {
-        if (!comment.author) return;
+        if (!comment.author || comment.author === '[deleted]') return;
         return (
           <li className={style.item} key={comment.id}>
             <Text
