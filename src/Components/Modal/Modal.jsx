@@ -7,18 +7,14 @@ import {useEffect, useRef, useState} from 'react';
 import {useCommentsData} from '../../hooks/useCommentsData';
 import {FormComment} from './FormComment/FormComment';
 import {Comments} from './Comments/Comments';
+import {Loader} from '../../UI/Loader/Loader';
 
 export const Modal = ({id, closeModal}) => {
-  const [[post, comments]] = useCommentsData(id);
+  const [post, comments, status] = useCommentsData(id);
   const [showCommentsForm, setShowCommentsForm] = useState(false);
   const [showCommentsBtn, setShowCommentsBtn] = useState(true);
-  const [isDataLoaded, setDataLoaded] = useState(false);
   const overlayRef = useRef(null);
   const closeBtnRef = useRef(null);
-
-  useEffect(() => {
-    if (post) setDataLoaded(true);
-  }, [post]);
 
   const handleCloseModal = e => {
     const target = e.target;
@@ -44,9 +40,9 @@ export const Modal = ({id, closeModal}) => {
     <div className={style.overlay} ref={overlayRef}>
       <div className={style.modal} >
 
-        {!isDataLoaded && <p>Идет загрузка...</p>}
-
-        {isDataLoaded && (
+        {status === 'loading' && <Loader/>}
+        {status === 'error' && 'Ошибка'}
+        {status === 'loaded' && (
           <>
             <h2 className={style.title}>
               <a

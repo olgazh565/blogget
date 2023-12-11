@@ -1,9 +1,7 @@
 import {Header} from './Components/Header/Header';
 import {Main} from './Components/Main/Main';
 import {useDispatch} from 'react-redux';
-import {AuthContextProvider} from './context/authContext';
-import {PostsContextProvider} from './context/postsContext';
-import {updateToken} from './store';
+import {updateToken} from './store/tokenReducer/tokenAction';
 import {getToken} from './api/token';
 
 const App = () => {
@@ -11,12 +9,10 @@ const App = () => {
   dispatch(updateToken(getToken()));
 
   return (
-    <AuthContextProvider>
-      <PostsContextProvider>
-        <Header />
-        <Main />
-      </PostsContextProvider>
-    </AuthContextProvider>
+    <>
+      <Header />
+      <Main />
+    </>
   );
 };
 

@@ -1,14 +1,16 @@
-import {useContext} from 'react';
 import style from './List.module.scss';
 import {Post} from './Post/Post';
-import {PostsContext} from '../../../context/postsContext';
+import {usePostsData} from '../../../hooks/usePostsData';
+import {Loader} from '../../../UI/Loader/Loader';
 
 export const List = () => {
-  const {postsData} = useContext(PostsContext);
+  const [postsData, status] = usePostsData();
 
   return (
     <ul className={style.list}>
-      {postsData.map(({data}) => (
+      {status === 'loading' && <Loader />}
+      {status === 'error' && 'Ошибка'}
+      {status === 'loaded' && postsData.map(({data}) => (
         <Post key={data.id} postData={data}/>
       ))}
     </ul>
