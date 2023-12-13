@@ -8,8 +8,11 @@ import {useCommentsData} from '../../hooks/useCommentsData';
 import {FormComment} from './FormComment/FormComment';
 import {Comments} from './Comments/Comments';
 import {Loader} from '../../UI/Loader/Loader';
+import {useNavigate, useParams} from 'react-router-dom';
 
-export const Modal = ({id, closeModal}) => {
+export const Modal = () => {
+  const {id, page} = useParams();
+  const navigate = useNavigate();
   const [post, comments, status] = useCommentsData(id);
   const [showCommentsForm, setShowCommentsForm] = useState(false);
   const [showCommentsBtn, setShowCommentsBtn] = useState(true);
@@ -20,7 +23,7 @@ export const Modal = ({id, closeModal}) => {
     const target = e.target;
     if (target === overlayRef.current ||
       closeBtnRef.current?.contains(target)) {
-      closeModal();
+      navigate(`/category/${page}`);
     }
   };
 
@@ -31,8 +34,25 @@ export const Modal = ({id, closeModal}) => {
 
   useEffect(() => {
     document.addEventListener('click', handleCloseModal);
+
     return () => {
       document.removeEventListener('click', handleCloseModal);
+    };
+  }, []);
+
+  const handleEscKey = (e) => {
+    if (id) {
+      if (e.key === 'Escape') {
+        navigate(`/category/${page}`);
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleEscKey);
+
+    return () => {
+      window.removeEventListener('keydown', handleEscKey);
     };
   }, []);
 

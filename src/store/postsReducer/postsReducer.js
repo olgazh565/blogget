@@ -3,12 +3,17 @@ import {
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_ERROR,
   SET_POSTS_DEFAULT,
+  FETCH_POSTS_SUCCESS_AFTER,
+  CHANGE_PAGE,
 } from './postsAction';
 
 const initialState = {
   status: '',
-  data: [],
+  posts: [],
   error: '',
+  after: '',
+  isLast: false,
+  page: '',
 };
 
 export const postsReducer = (state = initialState, action) => {
@@ -23,8 +28,19 @@ export const postsReducer = (state = initialState, action) => {
       return {
         ...state,
         status: 'loaded',
-        data: action.data,
+        posts: action.posts,
         error: '',
+        after: action.after,
+        isLast: !action.after,
+      };
+    case FETCH_POSTS_SUCCESS_AFTER:
+      return {
+        ...state,
+        status: 'loaded',
+        posts: [...state.posts, ...action.posts],
+        error: '',
+        after: action.after,
+        isLast: !action.after,
       };
     case FETCH_POSTS_ERROR:
       return {
@@ -35,9 +51,16 @@ export const postsReducer = (state = initialState, action) => {
     case SET_POSTS_DEFAULT:
       return {
         ...state,
-        data: [],
+        posts: [],
         error: '',
         status: '',
+      };
+    case CHANGE_PAGE:
+      return {
+        ...state,
+        page: action.page,
+        after: '',
+        isLast: false,
       };
     default:
       return state;

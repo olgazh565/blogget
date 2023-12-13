@@ -14,6 +14,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "allowNamedFunctions": 0,
     "react/react-in-jsx-scope": "off",
     "no-console": "off",
     "no-loop-func": ["error"],

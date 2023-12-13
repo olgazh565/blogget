@@ -1,26 +1,10 @@
 import style from './Content.module.scss';
 import PropTypes from 'prop-types';
 import {Text} from '../../../../../UI/Text/Text';
-import {useEffect, useState} from 'react';
-import {Modal} from '../../../../Modal/Modal';
+import {Link, useParams} from 'react-router-dom';
 
 export const Content = ({title, author, id}) => {
-  const [isModalOpen, setModalOpen] = useState(false);
-
-  const handleEscKey = (e) => {
-    if (isModalOpen) {
-      if (e.key === 'Escape') {
-        setModalOpen(false);
-      }
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleEscKey);
-    return () => {
-      window.removeEventListener('keydown', handleEscKey);
-    };
-  }, [isModalOpen]);
+  const {page} = useParams();
 
   return (
     <div className={style.content}>
@@ -32,16 +16,17 @@ export const Content = ({title, author, id}) => {
         tsize={24}
         dsize={28}
       >
-        <a
-          className={style.linkPost}
-          title={title}
-          href='#post'
-          onClick={() => {
-            setModalOpen(true);
-          }}
-        >
-          {title}
-        </a>
+        <Link className={style.linkPost} to={`/category/${page}/post/${id}`}>
+          <Text
+            bold
+            size={14}
+            tsize={22}
+            title={title}
+            className={style.linkPost}
+          >
+            {title}
+          </Text>
+        </Link>
       </Text>
       <Text
         As='a'
@@ -52,12 +37,6 @@ export const Content = ({title, author, id}) => {
         href='#author'>
         {author}
       </Text>
-      {isModalOpen &&
-        <Modal
-          id={id}
-          closeModal={() => setModalOpen(false)}
-        >
-        </Modal>}
     </div>
   );
 };

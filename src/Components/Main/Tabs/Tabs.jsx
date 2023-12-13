@@ -9,18 +9,20 @@ import {ReactComponent as HomeIcon} from './img/home.svg';
 import {ReactComponent as HotIcon} from './img/hot.svg';
 import {ReactComponent as TopIcon} from './img/top.svg';
 import {Text} from '../../../UI/Text/Text';
+import {useNavigate} from 'react-router-dom';
 
 const LIST = [
-  {value: 'Главная', Icon: HomeIcon},
-  {value: 'Топ', Icon: TopIcon},
-  {value: 'Лучшие', Icon: BestIcon},
-  {value: 'Горячие', Icon: HotIcon}
+  {value: 'Главная', Icon: HomeIcon, link: 'rising'},
+  {value: 'Топ', Icon: TopIcon, link: 'top'},
+  {value: 'Лучшие', Icon: BestIcon, link: 'best'},
+  {value: 'Горячие', Icon: HotIcon, link: 'hot'}
 ].map(assignId);
 
 export const Tabs = () => {
   const [isDropdownOpen, setDropDownOpen] = useState(false);
   const [isDropdown, setDropDown] = useState(true);
   const [chosenTab, setChosenTab] = useState('Главная');
+  const navigate = useNavigate();
 
   const handleResize = () => {
     if (document.documentElement.clientWidth < 768) {
@@ -35,6 +37,7 @@ export const Tabs = () => {
     const debounceResize = debounceRaf(handleResize);
     debounceResize();
     window.addEventListener('resize', debounceResize);
+
     return () => {
       window.removeEventListener('resize', debounceResize);
     };
@@ -54,12 +57,16 @@ export const Tabs = () => {
       )}
       {(isDropdownOpen || !isDropdown) && (
         <ul className={style.list} onClick={() => setDropDownOpen(false)}>
-          {LIST.map(({value, id, Icon}) => (
+          {LIST.map(({value, link, id, Icon}) => (
             <Text As='li' className={style.item} key={id}>
               <Text
                 As='button'
                 className={style.btn}
-                onClick={() => setChosenTab(value)}>
+                onClick={() => {
+                  setChosenTab(value);
+                  navigate(`/category/${link}`);
+                }}
+              >
                 {value}
                 {Icon && <Icon width={30} height={30} />}
               </Text>

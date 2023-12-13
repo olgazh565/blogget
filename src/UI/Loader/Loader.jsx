@@ -1,11 +1,17 @@
 import ClipLoader from 'react-spinners/ClipLoader';
 
-export const Loader = () => (
-  <ClipLoader
-    color='#cc6633'
-    css={{display: 'block'}}
-    size={30}
-  />
-);
+export const Loader = () => {
+  const override = {
+    display: 'block',
+  };
+
+  return (
+    <ClipLoader
+      color='#cc6633'
+      cssOverride={override}
+      size={30}
+    />
+  );
+};
 
 

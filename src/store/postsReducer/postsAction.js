@@ -6,42 +6,72 @@ export const FETCH_POSTS = 'FETCH_POSTS';
 export const FETCH_POSTS_SUCCESS = 'FETCH_POSTS_SUCCESS';
 export const FETCH_POSTS_ERROR = 'FETCH_POSTS_ERROR';
 export const SET_POSTS_DEFAULT = 'SET_POSTS_DEFAULT';
+export const FETCH_POSTS_SUCCESS_AFTER = 'FETCH_POSTS_SUCCESS_AFTER';
+export const CHANGE_PAGE = 'CHANGE_PAGE';
 
-export const fetchPosts = () => ({
+const fetchPosts = () => ({
   type: FETCH_POSTS,
 });
 
-export const fetchPostsSuccess = (data) => ({
+const fetchPostsSuccess = (data) => ({
   type: FETCH_POSTS_SUCCESS,
-  data,
+  posts: data.children,
+  after: data.after,
 });
 
-export const fetchPostError = (error) => ({
+const fetchPostsSuccessAfter = (data) => ({
+  type: FETCH_POSTS_SUCCESS_AFTER,
+  posts: data.children,
+  after: data.after,
+});
+
+const fetchPostError = (error) => ({
   type: FETCH_POSTS_ERROR,
   error,
 });
 
-export const setPostsDefault = () => ({
+const setPostsDefault = () => ({
   type: SET_POSTS_DEFAULT,
 });
 
-export const fetchPostsAsync = () => (dispatch, getState) => {
+const changePage = page => ({
+  type: CHANGE_PAGE,
+  page,
+});
+
+export const fetchPostsAsync = (newPage) => (dispatch, getState) => {
+  let page = getState().postsReducer.page;
+
+  if (newPage) {
+    page = newPage;
+    dispatch(changePage(page));
+  }
+
   const token = getState().tokenReducer.token;
+  const after = getState().postsReducer.after;
+  const status = getState().postsReducer.status;
+  const isLast = getState().postsReducer.isLast;
 
   if (!token) {
     dispatch(setPostsDefault());
     return;
   }
 
+  if (status === 'loading' || isLast) return;
+
   dispatch(fetchPosts());
 
-  axios(`${URL_API}/best`, {
+  axios(`${URL_API}/${page}?limit=10&${after ? `after=${after}` : ''}`, {
     headers: {
       Authorization: `bearer ${token}`
     }
   })
-    .then(({data: {data: {children: posts}}}) => {
-      dispatch(fetchPostsSuccess(posts));
+    .then(({data}) => {
+      if (after) {
+        dispatch(fetchPostsSuccessAfter(data.data));
+      } else {
+        dispatch(fetchPostsSuccess(data.data));
+      }
     })
     .catch((error) => {
       if (error.response && error.response.status === 401) {
