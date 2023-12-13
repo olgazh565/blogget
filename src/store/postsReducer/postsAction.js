@@ -30,7 +30,7 @@ const fetchPostError = (error) => ({
   error,
 });
 
-const setPostsDefault = () => ({
+export const setPostsDefault = () => ({
   type: SET_POSTS_DEFAULT,
 });
 
@@ -52,12 +52,7 @@ export const fetchPostsAsync = (newPage) => (dispatch, getState) => {
   const status = getState().postsReducer.status;
   const isLast = getState().postsReducer.isLast;
 
-  if (!token) {
-    dispatch(setPostsDefault());
-    return;
-  }
-
-  if (status === 'loading' || isLast) return;
+  if (!token || status === 'loading' || isLast) return;
 
   dispatch(fetchPosts());
 

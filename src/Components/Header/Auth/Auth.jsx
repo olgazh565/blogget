@@ -8,12 +8,15 @@ import {deleteToken} from '../../../store/tokenReducer/tokenAction';
 import {useAuth} from '../../../hooks/useAuth';
 import {Loader} from '../../../UI/Loader/Loader';
 import {AuthError} from './AuthError/AuthError';
+import {setPostsDefault} from '../../../store/postsReducer/postsAction';
+import {useNavigate} from 'react-router-dom';
 
 export const Auth = () => {
   const dispatch = useDispatch();
   const [auth, status, error, delAuth] = useAuth();
   const [showLogout, setShowLogout] = useState(false);
   const [isErrAlert, setErrAlert] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (status === 'error') setErrAlert(true);
@@ -26,8 +29,9 @@ export const Auth = () => {
   const handleClearAuth = () => {
     delAuth();
     dispatch(deleteToken());
+    dispatch(setPostsDefault());
     setShowLogout(false);
-    window.history.replaceState(null, '', window.location.origin);
+    navigate('/');
   };
 
   return (

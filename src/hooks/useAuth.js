@@ -5,9 +5,7 @@ import {authLogout, authRequestAsync} from '../store/authReducer/authAction';
 export const useAuth = () => {
   const dispatch = useDispatch();
   const token = useSelector(state => state.tokenReducer.token);
-  const auth = useSelector(state => state.authReducer.data);
-  const status = useSelector(state => state.authReducer.status);
-  const error = useSelector(state => state.authReducer.error);
+  const {data: auth, status, error} = useSelector(state => state.authReducer);
 
   useEffect(() => {
     dispatch(authRequestAsync());

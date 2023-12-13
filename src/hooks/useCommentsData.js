@@ -5,9 +5,8 @@ import {fetchCommentsAsync}
 
 export const useCommentsData = (id) => {
   const dispatch = useDispatch();
-  const post = useSelector(state => state.postCommentsReducer.post);
-  const comments = useSelector(state => state.postCommentsReducer.comments);
-  const status = useSelector(state => state.postCommentsReducer.status);
+  const {post, comments, status} =
+    useSelector(state => state.postCommentsReducer);
 
   useEffect(() => {
     dispatch(fetchCommentsAsync(id));

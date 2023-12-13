@@ -17,6 +17,7 @@ export const tokenMiddleware = store => next => (action) => {
   if (action.type === UPDATE_TOKEN) {
     setToken(action.token);
   }
+
   if (action.type === DELETE_TOKEN) {
     setToken('');
   }
