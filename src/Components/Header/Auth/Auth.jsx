@@ -8,7 +8,7 @@ import {deleteToken} from '../../../store/tokenReducer/tokenAction';
 import {useAuth} from '../../../hooks/useAuth';
 import {Loader} from '../../../UI/Loader/Loader';
 import {AuthError} from './AuthError/AuthError';
-import {setPostsDefault} from '../../../store/postsReducer/postsAction';
+import {resetPostsState} from '../../../store/postsReducer/postsSlice';
 import {useNavigate} from 'react-router-dom';
 
 export const Auth = () => {
@@ -29,7 +29,7 @@ export const Auth = () => {
   const handleClearAuth = () => {
     delAuth();
     dispatch(deleteToken());
-    dispatch(setPostsDefault());
+    dispatch(resetPostsState());
     setShowLogout(false);
     navigate('/');
   };

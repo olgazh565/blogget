@@ -1,16 +1,17 @@
-// import {useEffect} from 'react';
-// import {useDispatch, useSelector} from 'react-redux';
-// import {fetchPostsAsync} from '../store/postsReducer/postsAction';
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchPosts} from '../store/postsReducer/postsAction';
 
-// export const usePostsData = () => {
-//   const dispatch = useDispatch();
-//   const token = useSelector(state => state.tokenReducer.token);
-//   const posts = useSelector(state => state.postsReducer.posts);
-//   const status = useSelector(state => state.postsReducer.status);
+export const usePostsData = (page) => {
+  const dispatch = useDispatch();
+  const token = useSelector(state => state.tokenReducer.token);
+  const {posts, status, isLast} = useSelector(state => state.postsReducer);
 
-//   useEffect(() => {
-//     dispatch(fetchPostsAsync());
-//   }, [token]);
+  useEffect(() => {
+    if (!page || !token) return;
 
-//   return [posts, status];
-// };
+    dispatch(fetchPosts(page));
+  }, [token, page]);
+
+  return [posts, status, isLast];
+};

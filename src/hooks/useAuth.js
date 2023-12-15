@@ -8,6 +8,8 @@ export const useAuth = () => {
   const {data: auth, status, error} = useSelector(state => state.authReducer);
 
   useEffect(() => {
+    if (!token) return;
+
     dispatch(authRequestAsync());
   }, [token]);
 

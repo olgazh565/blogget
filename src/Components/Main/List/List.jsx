@@ -2,26 +2,23 @@ import style from './List.module.scss';
 import {Post} from './Post/Post';
 import {Loader} from '../../../UI/Loader/Loader';
 import {useEffect, useRef} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchPostsAsync} from '../../../store/postsReducer/postsAction';
+import {useDispatch} from 'react-redux';
+import {fetchPosts} from '../../../store/postsReducer/postsAction';
 import {Outlet, useParams} from 'react-router-dom';
+import {usePostsData} from '../../../hooks/usePostsData';
 
 export const List = () => {
-  const {posts, status, isLast} = useSelector(state => state.postsReducer);
+  const {page} = useParams();
+  const [posts, status, isLast] = usePostsData(page);
   const endList = useRef(null);
   const dispatch = useDispatch();
-  const {page} = useParams();
 
   useEffect(() => {
-    dispatch(fetchPostsAsync(page));
-  }, [page]);
-
-  useEffect(() => {
-    if (!endList.current) return;
+    if (!endList.current || isLast) return;
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        dispatch(fetchPostsAsync());
+        dispatch(fetchPosts(page));
       }
     }, {
       rootMargin: '50px',
@@ -32,7 +29,7 @@ export const List = () => {
     return () => {
       endList.current && observer.unobserve(endList.current);
     };
-  }, [endList.current]);
+  }, [endList.current, isLast, status]);
 
   return (
     <>
@@ -40,24 +37,34 @@ export const List = () => {
         {status === 'error' && 'Ошибка'}
         {
           (posts.length !== 0) ? posts.map(({data}) => (
-            <Post key={data.id} postData={data} />
+            <Post key={data.id + Math.random().toFixed(3)} postData={data} />
           )) :
-          (status === 'loaded' &&
-            <p><b>В данной категории постов нет</b></p>)
+            (status === 'loaded' &&
+              <p><b>В данной категории постов нет</b></p>)
         }
-        <li className={style.wrapper}>
-          {
-            (posts.length >= 30 && !isLast) ?
-              <button
-                className={style.btn}
-                onClick={() => dispatch(fetchPostsAsync())}
-              >
-                Загрузить еще
-              </button> :
-              <p ref={endList} className={style.end} />
-          }
-          {status === 'loading' && <Loader />}
-        </li>
+        {status === 'loaded' &&
+          (
+            <li className={style.wrapper}>
+              {
+                (posts.length >= 30 && !isLast) ?
+                  <button
+                    className={style.btn}
+                    onClick={() => dispatch(fetchPosts(page))}
+                  >
+                    Загрузить еще
+                  </button> :
+                  <p ref={endList} className={style.end} />
+              }
+            </li>
+          )
+        }
+        {status === 'loading' &&
+          (
+            <li className={style.loader}>
+              <Loader />
+            </li>
+          )
+        }
       </ul>
       <Outlet />
     </>

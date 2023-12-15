@@ -10,6 +10,11 @@ import {ReactComponent as HotIcon} from './img/hot.svg';
 import {ReactComponent as TopIcon} from './img/top.svg';
 import {Text} from '../../../UI/Text/Text';
 import {useNavigate} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  changePage,
+  resetPostsState
+} from '../../../store/postsReducer/postsSlice';
 
 const LIST = [
   {value: 'Главная', Icon: HomeIcon, link: 'rising'},
@@ -23,6 +28,8 @@ export const Tabs = () => {
   const [isDropdown, setDropDown] = useState(true);
   const [chosenTab, setChosenTab] = useState('Главная');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {page, status} = useSelector(state => state.postsReducer);
 
   const handleResize = () => {
     if (document.documentElement.clientWidth < 768) {
@@ -65,6 +72,8 @@ export const Tabs = () => {
                 onClick={() => {
                   setChosenTab(value);
                   navigate(`/category/${link}`);
+                  if (page !== link) dispatch(changePage(link));
+                  if (page !== link && status) dispatch(resetPostsState());
                 }}
               >
                 {value}
