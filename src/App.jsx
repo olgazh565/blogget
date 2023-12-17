@@ -5,15 +5,17 @@ import {updateToken} from './store/tokenReducer/tokenAction';
 import {getToken} from './api/token';
 import {Route, Routes, useLocation} from 'react-router-dom';
 import {useEffect} from 'react';
-import {resetSearchResult} from './store/searchReducer/searchReducer';
+import {resetSearchResult} from './store/searchReducer/searchSlice';
 
 const App = () => {
   const search = useSelector(state => state.searchReducer.search);
   const {pathname} = useLocation();
   const dispatch = useDispatch();
 
+  const token = getToken();
+
   useEffect(() => {
-    dispatch(updateToken(getToken()));
+    dispatch(updateToken(token));
   }, []);
 
   useEffect(() => {

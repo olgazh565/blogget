@@ -2,7 +2,7 @@ import {useLocation} from 'react-router-dom';
 import {List} from '../Main/List/List';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect} from 'react';
-import {searchRequest} from '../../store/searchReducer/searchReducer';
+import {fetchSearch} from '../../store/searchReducer/searchAction';
 
 export const SearchList = () => {
   const token = useSelector(state => state.tokenReducer.token);
@@ -14,7 +14,7 @@ export const SearchList = () => {
   useEffect(() => {
     if (!pathname.includes('search') || status || !token) return;
 
-    dispatch(searchRequest(search));
+    dispatch(fetchSearch(search));
   }, [token, status, pathname]);
 
   return (

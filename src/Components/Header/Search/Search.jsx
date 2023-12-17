@@ -5,8 +5,9 @@ import {useNavigate} from 'react-router-dom';
 import {ReactComponent as SearchIcon} from './img/search.svg';
 import {
   resetSearchResult,
-  searchRequest
-} from '../../../store/searchReducer/searchReducer';
+  setSearchValue
+} from '../../../store/searchReducer/searchSlice';
+import {fetchSearch} from '../../../store/searchReducer/searchAction';
 
 export const Search = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,8 @@ export const Search = () => {
 
     if (search !== searchStore) {
       dispatch(resetSearchResult());
-      dispatch(searchRequest(search));
+      dispatch(fetchSearch(search));
+      dispatch(setSearchValue(search));
       navigate(`/search?q=${search}`);
       localStorage.setItem('search', search);
       setSearch('');

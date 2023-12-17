@@ -7,12 +7,13 @@ import {fetchPosts} from '../../../store/postsReducer/postsAction';
 import {Outlet, Route, Routes, useLocation, useParams} from 'react-router-dom';
 import {Modal} from '../../Modal/Modal';
 import PropTypes from 'prop-types';
-import {searchRequest} from '../../../store/searchReducer/searchReducer';
+import {fetchSearch} from '../../../store/searchReducer/searchAction';
 
 export const List = ({posts, status, isLast}) => {
   const {page} = useParams();
   const {pathname} = useLocation();
   const search = useSelector(state => state.searchReducer.search);
+  console.log('search: ', search);
   const endList = useRef(null);
   const dispatch = useDispatch();
 
@@ -24,7 +25,7 @@ export const List = ({posts, status, isLast}) => {
         if (page) {
           dispatch(fetchPosts(page));
         } else if (search) {
-          dispatch(searchRequest(search));
+          dispatch(fetchSearch(search));
         }
       }
     }, {
@@ -75,7 +76,7 @@ export const List = ({posts, status, isLast}) => {
                       if (page) {
                         dispatch(fetchPosts(page));
                       } else if (search) {
-                        dispatch(searchRequest(search));
+                        dispatch(fetchSearch(search));
                       }
                     }}
                   >

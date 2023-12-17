@@ -1,5 +1,5 @@
-import {watchSearch} from './searchReducer/searchSaga';
+// import {watchSearch} from './searchReducer/searchSaga';
 
-export default function* rootSaga() {
-  yield watchSearch();
-}
+// export default function* rootSaga() {
+//   yield watchSearch();
+// }

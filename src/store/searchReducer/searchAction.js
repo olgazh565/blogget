@@ -1,19 +1,31 @@
-// export const SEARCH_REQUEST = 'SEARCH_REQUEST';
-// export const SEARCH_REQUEST_SUCCESS = 'SEARCH_REQUEST_SUCCESS';
-// export const SEARCH_REQUEST_ERROR = 'SEARCH_REQUEST_ERROR';
+import {createAsyncThunk} from '@reduxjs/toolkit';
+import {URL_API} from '../../api/const';
+import axios from 'axios';
 
-// export const searchRequest = (search) => ({
-//   type: SEARCH_REQUEST,
-//   search,
-// });
+export const fetchSearch = createAsyncThunk(
+  'search/fetchSearch',
+  async (search, {getState}) => {
+    console.log('search: ', search);
+    const token = getState().tokenReducer.token;
+    const after = getState().searchReducer.after;
+    console.log('after: ', after);
+    const isLast = getState().searchReducer.isLast;
 
-// export const searchRequestSuccess = ({children, after}) => ({
-//   type: SEARCH_REQUEST_SUCCESS,
-//   posts: children,
-//   after,
-// });
+    if (!token || isLast || !search) return;
 
-// export const searchRequestError = (error) => ({
-//   type: SEARCH_REQUEST_ERROR,
-//   error,
-// });
+    try {
+      const request = await axios(
+        `${URL_API}/search?q=${search}&limit=10&${after ?
+            `after=${after}` : ''}`,
+        {
+          headers: {
+            Authorization: `bearer ${token}`
+          }
+        });
+
+      return request.data.data;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+);
