@@ -1,11 +1,11 @@
 import style from './Main.module.scss';
 import {Layout} from '../Layout/Layout';
 import {Tabs} from './Tabs/Tabs';
-import {List} from './List/List';
-import {Route, Routes} from 'react-router-dom';
-import {Modal} from '../Modal/Modal';
+import {Navigate, Route, Routes} from 'react-router-dom';
 import {NotFoundPage} from '../NotFoundPage/NotFoundPage';
 import {StartPage} from '../StartPage/StartPage';
+import {CategoryList} from '../CategoryList/CategoryList';
+import {SearchList} from '../SearchList/SearchList';
 
 export const Main = () => (
   <main className={style.main}>
@@ -13,9 +13,9 @@ export const Main = () => (
       <Tabs />
       <Routes>
         <Route path='/' element={<StartPage />}/>
-        <Route path='/category/:page' element={<List />}>
-          <Route path='post/:id' element={<Modal />}/>
-        </Route>
+        <Route path='/category/:page/*' element={<CategoryList />} />
+        <Route path='/search/*' element={<SearchList />} />
+        <Route path='auth' element={<Navigate to='/'/>} />
         <Route path='*' element={<NotFoundPage />}/>
       </Routes>
     </Layout>

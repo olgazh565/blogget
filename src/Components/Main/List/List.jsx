@@ -2,14 +2,17 @@ import style from './List.module.scss';
 import {Post} from './Post/Post';
 import {Loader} from '../../../UI/Loader/Loader';
 import {useEffect, useRef} from 'react';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {fetchPosts} from '../../../store/postsReducer/postsAction';
-import {Outlet, useParams} from 'react-router-dom';
-import {usePostsData} from '../../../hooks/usePostsData';
+import {Outlet, Route, Routes, useLocation, useParams} from 'react-router-dom';
+import {Modal} from '../../Modal/Modal';
+import PropTypes from 'prop-types';
+import {searchRequest} from '../../../store/searchReducer/searchReducer';
 
-export const List = () => {
+export const List = ({posts, status, isLast}) => {
   const {page} = useParams();
-  const [posts, status, isLast] = usePostsData(page);
+  const {pathname} = useLocation();
+  const search = useSelector(state => state.searchReducer.search);
   const endList = useRef(null);
   const dispatch = useDispatch();
 
@@ -18,7 +21,11 @@ export const List = () => {
 
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
-        dispatch(fetchPosts(page));
+        if (page) {
+          dispatch(fetchPosts(page));
+        } else if (search) {
+          dispatch(searchRequest(search));
+        }
       }
     }, {
       rootMargin: '50px',
@@ -29,17 +36,32 @@ export const List = () => {
     return () => {
       endList.current && observer.unobserve(endList.current);
     };
-  }, [endList.current, isLast, status]);
+  }, [endList.current, isLast, status, page, search]);
 
   return (
     <>
+      {
+        (pathname.includes('search') && status === 'loaded') &&
+        (
+          <p className={style.searchText}>
+            По вашему запросу &quot;
+            <b>
+              {search}
+            </b>
+            &quot;
+            {
+              posts.length !== 0 ? 'найдено:' : 'ничего не найдено'
+            }
+          </p>
+        )
+      }
       <ul className={style.list}>
         {status === 'error' && 'Ошибка'}
         {
           (posts.length !== 0) ? posts.map(({data}) => (
             <Post key={data.id + Math.random().toFixed(3)} postData={data} />
           )) :
-            (status === 'loaded' &&
+            ((status === 'loaded' && !pathname.includes('search')) &&
               <p><b>В данной категории постов нет</b></p>)
         }
         {status === 'loaded' &&
@@ -49,7 +71,13 @@ export const List = () => {
                 (posts.length >= 30 && !isLast) ?
                   <button
                     className={style.btn}
-                    onClick={() => dispatch(fetchPosts(page))}
+                    onClick={() => {
+                      if (page) {
+                        dispatch(fetchPosts(page));
+                      } else if (search) {
+                        dispatch(searchRequest(search));
+                      }
+                    }}
                   >
                     Загрузить еще
                   </button> :
@@ -66,8 +94,16 @@ export const List = () => {
           )
         }
       </ul>
+      <Routes>
+        <Route path='post/:id' element={<Modal />} />
+      </Routes>
       <Outlet />
     </>
   );
 };
 
+List.propTypes = {
+  posts: PropTypes.array,
+  status: PropTypes.string,
+  isLast: PropTypes.bool,
+};

@@ -1,20 +1,27 @@
 import {Header} from './Components/Header/Header';
 import {Main} from './Components/Main/Main';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {updateToken} from './store/tokenReducer/tokenAction';
-import {useToken} from './api/token';
-import {Route, Routes} from 'react-router-dom';
+import {getToken} from './api/token';
+import {Route, Routes, useLocation} from 'react-router-dom';
 import {useEffect} from 'react';
+import {resetSearchResult} from './store/searchReducer/searchReducer';
 
 const App = () => {
+  const search = useSelector(state => state.searchReducer.search);
+  const {pathname} = useLocation();
   const dispatch = useDispatch();
-  const [token] = useToken();
 
   useEffect(() => {
-    if (!token) return;
+    dispatch(updateToken(getToken()));
+  }, []);
 
-    dispatch(updateToken(token));
-  }, [token]);
+  useEffect(() => {
+    if (search && !pathname.includes('search')) {
+      localStorage.removeItem('search');
+      dispatch(resetSearchResult());
+    }
+  }, [search, pathname]);
 
   return (
     <Routes>

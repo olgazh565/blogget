@@ -9,6 +9,7 @@ import {FormComment} from './FormComment/FormComment';
 import {Comments} from './Comments/Comments';
 import {Loader} from '../../UI/Loader/Loader';
 import {useNavigate, useParams} from 'react-router-dom';
+import {useSelector} from 'react-redux';
 
 export const Modal = () => {
   const {id, page} = useParams();
@@ -18,12 +19,18 @@ export const Modal = () => {
   const [showCommentsBtn, setShowCommentsBtn] = useState(true);
   const overlayRef = useRef(null);
   const closeBtnRef = useRef(null);
+  const search = useSelector(state => state.searchReducer.search);
 
   const handleCloseModal = e => {
     const target = e.target;
+
     if (target === overlayRef.current ||
       closeBtnRef.current?.contains(target)) {
-      navigate(`/category/${page}`);
+      if (page) {
+        navigate(`/category/${page}`);
+      } else if (search) {
+        navigate(`/search?q=${search}`);
+      }
     }
   };
 
@@ -43,7 +50,11 @@ export const Modal = () => {
   const handleEscKey = (e) => {
     if (id) {
       if (e.key === 'Escape') {
-        navigate(`/category/${page}`);
+        if (page) {
+          navigate(`/category/${page}`);
+        } else if (search) {
+          navigate(`/search?q=${search}`);
+        }
       }
     }
   };
@@ -60,7 +71,7 @@ export const Modal = () => {
     <div className={style.overlay} ref={overlayRef}>
       <div className={style.modal} >
 
-        {status === 'loading' && <Loader/>}
+        {status === 'loading' && <Loader />}
         {status === 'error' && 'Ошибка'}
         {status === 'loaded' && (
           <>

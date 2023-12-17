@@ -16,7 +16,13 @@ export const Content = ({title, author, id}) => {
         tsize={24}
         dsize={28}
       >
-        <Link className={style.linkPost} to={`/category/${page}/post/${id}`}>
+        <Link
+          className={style.linkPost}
+          to={page ?
+            `/category/${page}/post/${id}` :
+            `/search/post/${id}`
+          }
+        >
           <Text
             bold
             size={14}
