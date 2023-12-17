@@ -5,7 +5,7 @@ import {
   searchRequest,
   searchRequestError,
   searchRequestSuccess
-} from './searchReducer';
+} from './searchSlice';
 
 function* fetchSearch({payload: search}) {
   const token = yield select(state => state.tokenReducer.token);
@@ -27,12 +27,8 @@ function* fetchSearch({payload: search}) {
   }
 }
 
-// function* workerSearch(action) {
-//   const token = yield select(state => state.tokenReducer.token);
-//   const {data} = yield call(fetchSearch, action.search, token);
-//   yield put(searchRequestSuccess(data));
-// }
-
-export function* watchSearch() {
+export default function* watchSearch() {
   yield takeLatest(searchRequest, fetchSearch);
 }
+
+

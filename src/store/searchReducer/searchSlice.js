@@ -35,6 +35,7 @@ const searchSlice = createSlice({
       state.error = '';
       state.after = '';
       state.isLast = false;
+      state.search = '';
     }
   }
 });
@@ -48,31 +49,3 @@ export const {
   resetSearchResult,
 } = searchSlice.actions;
 
-
-// export const searchReducer = (state = initialState, action) => {
-//   switch (action.type) {
-//     case SEARCH_REQUEST:
-//       return {
-//         ...state,
-//         status: 'loading',
-//         error: '',
-//       };
-//     case SEARCH_REQUEST_SUCCESS:
-//       return {
-//         ...state,
-//         loading: false,
-//         posts: [...state.posts, ...action.posts],
-//         error: '',
-//         after: action.after,
-//         isLast: !action.after,
-//       };
-//     case SEARCH_REQUEST_ERROR:
-//       return {
-//         ...state,
-//         status: 'error',
-//         error: action.error,
-//       };
-//     default:
-//       return state;
-//   }
-// };

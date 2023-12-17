@@ -11,8 +11,9 @@ import {ReactComponent as TopIcon} from './img/top.svg';
 import {Text} from '../../../UI/Text/Text';
 import {useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
+import {message} from 'antd';
 import {
-  changePage,
+  fetchPosts,
   resetPostsState
 } from '../../../store/postsReducer/postsSlice';
 
@@ -30,6 +31,8 @@ export const Tabs = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {page, status} = useSelector(state => state.postsReducer);
+  const token = useSelector(state => state.tokenReducer.token);
+  const [messageApi, contextHolder] = message.useMessage();
 
   const handleResize = () => {
     if (document.documentElement.clientWidth < 768) {
@@ -50,8 +53,24 @@ export const Tabs = () => {
     };
   }, []);
 
+  const warning = () => {
+    messageApi.open({
+      type: 'warning',
+      content: 'Для продолжения работы необходимо авторизоваться',
+    });
+  };
+
+  const handleClick = (value, link) => {
+    if (!token) warning();
+    setChosenTab(value);
+    navigate(`/category/${link}`);
+    if (page !== link && status) dispatch(resetPostsState());
+    if (page !== link && token) dispatch(fetchPosts(link));
+  };
+
   return (
     <div className={style.container}>
+      {contextHolder}
       {isDropdown && (
         <div className={style.wrapperBtn}>
           <button
@@ -69,12 +88,7 @@ export const Tabs = () => {
               <Text
                 As='button'
                 className={style.btn}
-                onClick={() => {
-                  setChosenTab(value);
-                  navigate(`/category/${link}`);
-                  if (page !== link) dispatch(changePage(link));
-                  if (page !== link && status) dispatch(resetPostsState());
-                }}
+                onClick={() => handleClick(value, link)}
               >
                 {value}
                 {Icon && <Icon width={30} height={30} />}

@@ -1,7 +1,7 @@
 import style from './Main.module.scss';
 import {Layout} from '../Layout/Layout';
 import {Tabs} from './Tabs/Tabs';
-import {Navigate, Route, Routes} from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import {NotFoundPage} from '../NotFoundPage/NotFoundPage';
 import {StartPage} from '../StartPage/StartPage';
 import {CategoryList} from '../CategoryList/CategoryList';
@@ -15,7 +15,6 @@ export const Main = () => (
         <Route path='/' element={<StartPage />}/>
         <Route path='/category/:page/*' element={<CategoryList />} />
         <Route path='/search/*' element={<SearchList />} />
-        <Route path='auth' element={<Navigate to='/'/>} />
         <Route path='*' element={<NotFoundPage />}/>
       </Routes>
     </Layout>

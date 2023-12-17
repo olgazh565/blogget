@@ -2,7 +2,7 @@ import {useLocation} from 'react-router-dom';
 import {List} from '../Main/List/List';
 import {useDispatch, useSelector} from 'react-redux';
 import {useEffect} from 'react';
-import {searchRequest} from '../../store/searchReducer/searchReducer';
+import {searchRequest} from '../../store/searchReducer/searchSlice';
 
 export const SearchList = () => {
   const token = useSelector(state => state.tokenReducer.token);

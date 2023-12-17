@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchPostComments}
-  from '../store/postCommentsReducer/postCommentsAction';
+  from '../store/postCommentsReducer/postCommentsSlice';
 
 export const useCommentsData = (id) => {
   const token = useSelector(state => state.tokenReducer.token);

@@ -1,13 +1,13 @@
 import style from './List.module.scss';
-import {Post} from './Post/Post';
-import {Loader} from '../../../UI/Loader/Loader';
+import PropTypes from 'prop-types';
 import {useEffect, useRef} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchPosts} from '../../../store/postsReducer/postsAction';
 import {Outlet, Route, Routes, useLocation, useParams} from 'react-router-dom';
+import {searchRequest} from '../../../store/searchReducer/searchSlice';
+import {fetchPosts} from '../../../store/postsReducer/postsSlice';
+import {Loader} from '../../../UI/Loader/Loader';
 import {Modal} from '../../Modal/Modal';
-import PropTypes from 'prop-types';
-import {searchRequest} from '../../../store/searchReducer/searchReducer';
+import {Post} from './Post/Post';
 
 export const List = ({posts, status, isLast}) => {
   const {page} = useParams();
