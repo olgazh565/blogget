@@ -15,7 +15,6 @@ export const Modal = () => {
   const {id, page} = useParams();
   const navigate = useNavigate();
   const [post, comments, status] = useCommentsData(id);
-  console.log('post: ', post);
   const [showCommentsForm, setShowCommentsForm] = useState(false);
   const [showCommentsBtn, setShowCommentsBtn] = useState(true);
   const overlayRef = useRef(null);
