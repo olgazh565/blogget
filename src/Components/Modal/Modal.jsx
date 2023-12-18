@@ -15,6 +15,7 @@ export const Modal = () => {
   const {id, page} = useParams();
   const navigate = useNavigate();
   const [post, comments, status] = useCommentsData(id);
+  console.log('post: ', post);
   const [showCommentsForm, setShowCommentsForm] = useState(false);
   const [showCommentsBtn, setShowCommentsBtn] = useState(true);
   const overlayRef = useRef(null);
@@ -97,6 +98,17 @@ export const Modal = () => {
                 {post.selftext}
               </Markdown>
             </div>
+
+            {post.media?.reddit_video?.fallback_url &&
+              <video
+                src={
+                  post.media?.reddit_video?.fallback_url
+                }
+                autoPlay
+                height={200}
+                loop
+              >
+              </video>}
 
             <p className={style.author}>{post && post.author}</p>
 

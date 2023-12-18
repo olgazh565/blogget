@@ -14,7 +14,7 @@ export const deleteToken = () => ({
 });
 
 export const tokenMiddleware = store => next => (action) => {
-  if (action.type === UPDATE_TOKEN && action.token) {
+  if (action.type === UPDATE_TOKEN) {
     setToken(action.token);
   }
 
